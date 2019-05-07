@@ -15,51 +15,53 @@ import com.cibertec.dsw2.Model.Product;
 import com.cibertec.dsw2.Repository.ProductRepository;
 
 @RestController
-@RequestMapping(path = "{/dsw2}")
 public class ProductController {
 
+    @PersistenceContext
+    private EntityManager em;
+
     @Autowired
-    private ProductRepository rep;
+    private ProductRepository repository;
 
 
-    @GetMapping(path = {"/product", "/product/"})
+    @GetMapping(path = "/product")
     public List<Product> retriveAll() {
-        return rep.findAll();
+        return repository.findAll();
     }
 
-    @GetMapping(path = {"/product/{id}", "/product/{id}/"})
-    public Product retriveOne(@PathVariable Integer id) {
-        Optional<Product> prod = rep.findById(id);
+    @GetMapping(path = "/product/{id}")
+    public Product retriveOne(@PathVariable long id) {
+        Optional<Product> prod = repository.findById(id);
 
         return prod.get();
     }
 
-    @PostMapping(path = {"/product", "/product/"})
+    @PostMapping(path = "/product")
     public ResponseEntity<Object> create(@RequestBody Product prod) {
-        Product entity = rep.save(prod);
+        Product entity = repository.save(prod);
 
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
-                .buildAndExpand(entity.getId()).toUri();
+                .buildAndExpand(entity.getNum_product_id()).toUri();
 
         return ResponseEntity.created(location).build();
     }
 
     @PutMapping(path = {"/product/{id}", "/product/{id}/"})
-    public ResponseEntity<Object> update(@PathVariable Integer id, @RequestBody Product prod) {
-        Optional<Product> entity = rep.findById(id);
+    public ResponseEntity<Object> update(@PathVariable long id, @RequestBody Product prod) {
+        Optional<Product> entity = repository.findById(id);
 
         if (!entity.isPresent()) {
             return ResponseEntity.notFound().build();
         }
 
-        prod.setId(id);
-        rep.save(prod);
+        prod.setNum_product_id(id);
+        repository.save(prod);
 
         return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping(path = {"/product/{id}", "/product/{id}/"})
-    public void delete(@PathVariable Integer id) {
-        rep.deleteById(id);
+    public void delete(@PathVariable long id) {
+        repository.deleteById(id);
     }
 }

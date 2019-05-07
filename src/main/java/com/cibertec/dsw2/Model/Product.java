@@ -1,43 +1,39 @@
 package com.cibertec.dsw2.Model;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import javax.persistence.*;
 
-@com.fasterxml.jackson.annotation.JsonIgnoreProperties(ignoreUnknown = true)
-@com.fasterxml.jackson.annotation.JsonInclude(com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL)
-@javax.persistence.Entity
+
+@Entity
 public class Product {
 
     @Id
-    @GeneratedValue()
-    @JsonProperty("id")
-    private int id;
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @Column(name = "num_product_id")
+    private Long num_product_id;
 
-    @JsonProperty("description")
+    @Column(name = "str_description")
     private String description;
 
-    @JsonProperty("price")
-    private double price;
+    @Column(name = "num_price")
+    private Double price;
 
-    @JsonProperty("stock")
+    @Column(name = "num_stock")
     private int stock;
 
-    @JsonProperty("console_id")
+    @Column(name = "num_console_id")
     private int console_id;
 
-    @JsonProperty("videogame_id")
+    @Column(name = "num_videogame_id")
     private int videogame_id;
 
-    @JsonProperty("status")
-    private char status;
+    @Column(name = "chr_status")
+    private String status;
 
-    public Product(){
-
+    public Product() {
     }
 
-    public Product(int id, String description, double price, int stock, int console_id, int videogame_id, char status){
-        this.id = id;
+    public Product(Long num_product_id, String description, double price, int stock, int console_id, int videogame_id, String status) {
+        this.num_product_id = num_product_id;
         this.description = description;
         this.price = price;
         this.stock = stock;
@@ -46,12 +42,25 @@ public class Product {
         this.status = status;
     }
 
-    public int getId() {
-        return id;
+    @Override
+    public String toString() {
+        return "Product{" +
+                "num_product_id=" + num_product_id +
+                ", description='" + description + '\'' +
+                ", price=" + price +
+                ", stock=" + stock +
+                ", console_id=" + console_id +
+                ", videogame_id=" + videogame_id +
+                ", status=" + status +
+                '}';
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public Long getNum_product_id() {
+        return num_product_id;
+    }
+
+    public void setNum_product_id(Long num_product_id) {
+        this.num_product_id = num_product_id;
     }
 
     public String getDescription() {
@@ -94,25 +103,11 @@ public class Product {
         this.videogame_id = videogame_id;
     }
 
-    public char getStatus() {
+    public String getStatus() {
         return status;
     }
 
-    public void setStatus(char status) {
+    public void setStatus(String status) {
         this.status = status;
     }
-
-    @Override
-    public String toString(){
-
-        return "Product: {"+
-                "id = "+getId() +
-                "description = " + getDescription() +
-                "pice ="+getPrice()+
-                "status"+getStatus()+
-                "console_id"+getConsole_id()+
-                "videogame_id"+getVideogame_id()+"}";
-
-    }
-
 }
