@@ -1,7 +1,9 @@
-FROM openjdk:8-jre-alpine
+FROM openjdk:8-jdk-alpine
 
-ADD target/dsw2-0.0.1-SNAPSHOT.jar app.jar
+VOLUME /tmp
 
-ENTRYPOINT ["java", "-jar", "app.jar"]
+ARG JAR_FILE
 
-EXPOSE 8081
+ADD ${JAR_FILE} app.jar
+
+ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","/app.jar"]
