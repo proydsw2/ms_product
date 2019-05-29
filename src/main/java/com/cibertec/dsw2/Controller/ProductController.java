@@ -36,7 +36,8 @@ public class ProductController {
     @GetMapping(path = "/product/{id}")
     public Product retriveOne(@PathVariable Long id) {
         log.info("Encontrando un objeto");
-        return repository.findOne(id);
+        Optional<Product> product = repository.findById(id);
+        return product.get();
     }
 
     @PostMapping(path = "/product")
@@ -53,11 +54,9 @@ public class ProductController {
     @PutMapping(path = {"/product/{id}", "/product/{id}/"})
     public ResponseEntity<Object> update(@PathVariable Long id, @RequestBody Product prod) {
         log.info("Actualizando un objeto");
-        Product entity = repository.findOne(id);
+        Optional<Product> entity = repository.findById(id);
 
-        Optional<Product> resp = Optional.ofNullable(entity);
-
-        if (!resp.isPresent()) {
+        if (!entity.isPresent()) {
             return ResponseEntity.notFound().build();
         }
 
@@ -70,6 +69,6 @@ public class ProductController {
     @DeleteMapping(path = {"/product/{id}", "/product/{id}/"})
     public void delete(@PathVariable Long id) {
         log.info("Eliminando un objeto");
-        repository.delete(id);
+        repository.deleteById(id);
     }
 }
